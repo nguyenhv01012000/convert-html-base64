@@ -22,11 +22,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JEditorPane;
 @RestController
 public class ConvertHtmlToBase64 {
+
     @Autowired
     RestTemplate restTemplate;
 
     @GetMapping(value = "test")
-    public String getProductList() throws Exception{
+    public String getProductList(@RequestBody(required = true) String html) throws Exception{
 //        String url = "https://apis.ezpics.vn/apis/getListLayer";
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -43,8 +44,8 @@ public class ConvertHtmlToBase64 {
 //        ResponseEntity<Product> response = restTemplate.postForEntity( url, request , Product.class );
 //        ArrayList<ProductDetail> productDetail = Objects.requireNonNull(response.getBody()).data.productDetail;
 
-        String html = "<h1>Hello, world.</h1>";
-        int width = 200, height = 100;
+
+        int width = 538, height = 358;
 
         BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice().getDefaultConfiguration()
@@ -60,6 +61,7 @@ public class ConvertHtmlToBase64 {
         return encodeFileToBase64Binary(new File("Image.png"));
 
     }
+
     private static String encodeFileToBase64Binary(File file){
         String encodedfile = null;
         try {
