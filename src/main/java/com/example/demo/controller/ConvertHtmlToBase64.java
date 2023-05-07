@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import com.example.demo.entity.Html;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -27,7 +28,12 @@ public class ConvertHtmlToBase64 {
     RestTemplate restTemplate;
 
     @GetMapping(value = "test")
-    public String getProductList(@RequestBody(required = true) String html) throws Exception{
+    public String get() {
+        return "success";
+    }
+
+    @PostMapping(value = "test")
+    public String getProductList(@RequestBody Html html) throws Exception{
 //        String url = "https://apis.ezpics.vn/apis/getListLayer";
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -53,7 +59,7 @@ public class ConvertHtmlToBase64 {
 
         Graphics graphics = image.createGraphics();
 
-        JEditorPane jep = new JEditorPane("text/html", html);
+        JEditorPane jep = new JEditorPane("text/html", html.getHtml());
         jep.setSize(width, height);
         jep.print(graphics);
 
