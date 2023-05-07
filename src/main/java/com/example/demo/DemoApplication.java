@@ -10,18 +10,18 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class DemoApplication {
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
+		SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
 
-        builder.headless(false);
+		builder.headless(false);
 
-        ConfigurableApplicationContext context = builder.run(args);
-    }
+		ConfigurableApplicationContext context = builder.run(args);
+	}
 
-    @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
+	@Bean
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
+	}
 
 }
