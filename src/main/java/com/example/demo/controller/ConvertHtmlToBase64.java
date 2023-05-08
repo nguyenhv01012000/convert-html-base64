@@ -68,11 +68,8 @@ public class ConvertHtmlToBase64 {
         byte[] bytesData = new byte[(int) file.length()];
         fin.read(bytesData, 0, bytesData.length);
         fin.close();
-        file.delete(); // Xóa file tránh rác BPM
+        file.delete();
         return java.util.Base64.getEncoder().encodeToString(bytesData).trim();
-//        ImageIO.write(image, "png", file);
-//        String data = encodeFileToBase64Binary(file);
-//        return data;
     }
 
     private static String encodeFileToBase64Binary(File file){
