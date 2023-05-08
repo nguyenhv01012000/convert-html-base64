@@ -2,20 +2,18 @@ package com.example.demo.controller;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Objects;
 
 import com.example.demo.entity.Html;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.JEditorPane;
 @RestController
@@ -64,13 +62,12 @@ public class ConvertHtmlToBase64 {
                 .createCompatibleImage(width, height);
 
         Graphics graphics = image.createGraphics();
-
         JEditorPane jep = new JEditorPane("text/html", html.getHtml());
         jep.setSize(width, height);
         jep.print(graphics);
-        var file = new File("Image.png");
+
+        var file = new File(UUID.randomUUID() + "-image.png");
         var outputStream = new FileOutputStream(file);
-        //image.write(outputStream);
         ImageIO.write(image, "png", file);
         outputStream.close();
         FileInputStream fin = new FileInputStream(file);
@@ -78,7 +75,7 @@ public class ConvertHtmlToBase64 {
         fin.read(bytesData, 0, bytesData.length);
         fin.close();
         file.delete();
-        return new ResponseEntity<String>(java.util.Base64.getEncoder().encodeToString(bytesData).trim(), HttpStatus.OK);
+        return new ResponseEntity<String>(Base64.getEncoder().encodeToString(bytesData).trim(), HttpStatus.OK);
     }
 
 }
