@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests
 #
 # Package stage
 #
-FROM openjdk:11-jdk-slim
+FROM adoptopenjdk/openjdk11:jre-11.0.11_9
 COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
 # ENV PORT=8080
 EXPOSE 8080

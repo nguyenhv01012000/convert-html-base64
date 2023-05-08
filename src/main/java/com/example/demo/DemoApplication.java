@@ -12,16 +12,17 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
-
-		builder.headless(false);
-
-		ConfigurableApplicationContext context = builder.run(args);
+//		SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
+//
+//		builder.headless(false);
+//
+//		ConfigurableApplicationContext context = builder.run(args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	@Bean
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
-	}
+//	@Bean
+//	public RestTemplate getRestTemplate() {
+//		return new RestTemplate();
+//	}
 
 }

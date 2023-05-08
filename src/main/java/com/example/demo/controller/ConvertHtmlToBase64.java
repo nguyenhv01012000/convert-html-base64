@@ -1,33 +1,22 @@
 package com.example.demo.controller;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Objects;
 
 import com.example.demo.entity.Html;
-import org.springframework.beans.factory.annotation.Autowired;
+import gui.ava.html.image.generator.HtmlImageGenerator;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
 import java.util.UUID;
-import javax.imageio.ImageIO;
-import javax.swing.JEditorPane;
 @RestController
 public class ConvertHtmlToBase64 {
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @GetMapping(value = "test")
+    @GetMapping(value = "execute")
     public String get() {
         return "success";
     }
 
-    @PostMapping(value = "test")
+    @PostMapping(value = "execute")
     public ResponseEntity<String> getProductList(@RequestBody Html html) throws Exception{
 //        String url = "https://apis.ezpics.vn/apis/getListLayer";
 //        HttpHeaders headers = new HttpHeaders();
@@ -48,34 +37,21 @@ public class ConvertHtmlToBase64 {
         if(html.getHtml() == null){
             return new ResponseEntity<String>("Not null html", HttpStatus.BAD_REQUEST);
         }
-        if(html.getHeight() == null){
-            return new ResponseEntity<String>("Not null height", HttpStatus.BAD_REQUEST);
-        }
-        if(html.getWidth() == null){
-            return new ResponseEntity<String>("Not null width", HttpStatus.BAD_REQUEST);
-        }
 
-        int width = html.getWidth(), height = html.getHeight();
+        HtmlImageGenerator hig = new HtmlImageGenerator();
+        hig.loadHtml(html.getHtml());
 
-        BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .getDefaultScreenDevice().getDefaultConfiguration()
-                .createCompatibleImage(width, height);
 
-        Graphics graphics = image.createGraphics();
-        JEditorPane jep = new JEditorPane("text/html", html.getHtml());
-        jep.setSize(width, height);
-        jep.print(graphics);
-
-        var file = new File(UUID.randomUUID() + "-image.png");
+        var file = new File(UUID.randomUUID() + "-image" + ".png");
         var outputStream = new FileOutputStream(file);
-        ImageIO.write(image, "png", file);
+        hig.saveAsImage(file);
         outputStream.close();
         FileInputStream fin = new FileInputStream(file);
         byte[] bytesData = new byte[(int) file.length()];
         fin.read(bytesData, 0, bytesData.length);
         fin.close();
         file.delete();
-        return new ResponseEntity<String>("Base64.getEncoder().encodeToString(bytesData).trim()", HttpStatus.OK);
+        return new ResponseEntity<String>(Base64.getEncoder().encodeToString(bytesData).trim(), HttpStatus.OK);
     }
 
 }
