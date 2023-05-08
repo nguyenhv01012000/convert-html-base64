@@ -16,8 +16,8 @@ public class ConvertHtmlToBase64 {
         return "success";
     }
 
-    @PostMapping(value = "execute")
-    public ResponseEntity<String> getProductList(@RequestBody Html html) throws Exception{
+    @PostMapping(value = "execute", consumes="text/html")
+    public ResponseEntity<String> getProductList(@RequestBody String html) throws Exception{
 //        String url = "https://apis.ezpics.vn/apis/getListLayer";
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -34,12 +34,12 @@ public class ConvertHtmlToBase64 {
 //        ResponseEntity<Product> response = restTemplate.postForEntity( url, request , Product.class );
 //        ArrayList<ProductDetail> productDetail = Objects.requireNonNull(response.getBody()).data.productDetail;
 
-        if(html.getHtml() == null){
+        if(html == null){
             return new ResponseEntity<String>("Not null html", HttpStatus.BAD_REQUEST);
         }
 
         HtmlImageGenerator hig = new HtmlImageGenerator();
-        hig.loadHtml(html.getHtml());
+        hig.loadHtml(html);
 
 
         var file = new File(UUID.randomUUID() + "-image" + ".png");
