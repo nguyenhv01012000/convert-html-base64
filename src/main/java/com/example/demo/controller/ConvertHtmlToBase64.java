@@ -75,7 +75,7 @@ public class ConvertHtmlToBase64 {
         fin.read(bytesData, 0, bytesData.length);
         fin.close();
         file.delete();
-        return new ResponseEntity<String>(Base64.getEncoder().encodeToString(bytesData).trim(), HttpStatus.OK);
+        return new ResponseEntity<String>("Base64.getEncoder().encodeToString(bytesData).trim()", HttpStatus.OK);
     }
 
 }
