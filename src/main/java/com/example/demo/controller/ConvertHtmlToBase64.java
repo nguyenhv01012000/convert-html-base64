@@ -30,7 +30,7 @@ public class ConvertHtmlToBase64 {
     }
 
     @PostMapping(value = "test")
-    public String getProductList(@RequestBody Html html) throws Exception{
+    public ResponseEntity<String> getProductList(@RequestBody Html html) throws Exception{
 //        String url = "https://apis.ezpics.vn/apis/getListLayer";
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -47,8 +47,17 @@ public class ConvertHtmlToBase64 {
 //        ResponseEntity<Product> response = restTemplate.postForEntity( url, request , Product.class );
 //        ArrayList<ProductDetail> productDetail = Objects.requireNonNull(response.getBody()).data.productDetail;
 
+        if(html.getHtml() == null){
+            return new ResponseEntity<String>("Not null html", HttpStatus.BAD_REQUEST);
+        }
+        if(html.getHeight() == null){
+            return new ResponseEntity<String>("Not null height", HttpStatus.BAD_REQUEST);
+        }
+        if(html.getWidth() == null){
+            return new ResponseEntity<String>("Not null width", HttpStatus.BAD_REQUEST);
+        }
 
-        int width = 538, height = 358;
+        int width = html.getWidth(), height = html.getHeight();
 
         BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice().getDefaultConfiguration()
@@ -69,25 +78,7 @@ public class ConvertHtmlToBase64 {
         fin.read(bytesData, 0, bytesData.length);
         fin.close();
         file.delete();
-        return java.util.Base64.getEncoder().encodeToString(bytesData).trim();
-    }
-
-    private static String encodeFileToBase64Binary(File file){
-        String encodedfile = null;
-        try {
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int)file.length()];
-            fileInputStreamReader.read(bytes);
-            encodedfile = new String(Base64.encodeBase64(bytes,true), "UTF-8");
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return encodedfile;
+        return new ResponseEntity<String>(java.util.Base64.getEncoder().encodeToString(bytesData).trim(), HttpStatus.OK);
     }
 
 }
