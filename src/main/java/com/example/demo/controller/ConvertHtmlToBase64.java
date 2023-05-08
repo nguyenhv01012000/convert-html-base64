@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -18,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JEditorPane;
 @RestController
@@ -62,10 +59,20 @@ public class ConvertHtmlToBase64 {
         JEditorPane jep = new JEditorPane("text/html", html.getHtml());
         jep.setSize(width, height);
         jep.print(graphics);
-
-        ImageIO.write(image, "png", new File("Image.png"));
-        return encodeFileToBase64Binary(new File("Image.png"));
-
+        var file = new File("Image.png");
+        var outputStream = new FileOutputStream(file);
+        //image.write(outputStream);
+        ImageIO.write(image, "png", file);
+        outputStream.close();
+        FileInputStream fin = new FileInputStream(file);
+        byte[] bytesData = new byte[(int) file.length()];
+        fin.read(bytesData, 0, bytesData.length);
+        fin.close();
+        file.delete(); // Xóa file tránh rác BPM
+        return java.util.Base64.getEncoder().encodeToString(bytesData).trim();
+//        ImageIO.write(image, "png", file);
+//        String data = encodeFileToBase64Binary(file);
+//        return data;
     }
 
     private static String encodeFileToBase64Binary(File file){
